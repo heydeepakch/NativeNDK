@@ -1,36 +1,36 @@
 package com.example.nativendkdemo;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.widget.TextView;
-
-import com.example.nativendkdemo.databinding.ActivityMainBinding;
+import android.widget.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'nativendkdemo' library on application startup.
     static {
-        System.loadLibrary("nativendkdemo");
+        System.loadLibrary("native-lib");
     }
 
-    private ActivityMainBinding binding;
+    public native String getGreetingFromNative();
+    public native int addNumbers(int a, int b);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        TextView greeting = findViewById(R.id.greetingText);
+        EditText inputA = findViewById(R.id.inputA);
+        EditText inputB = findViewById(R.id.inputB);
+        Button addButton = findViewById(R.id.addButton);
+        TextView result = findViewById(R.id.resultText);
 
-        // Example of a call to a native method
-        TextView tv = binding.sampleText;
-        tv.setText(stringFromJNI());
+        greeting.setText(getGreetingFromNative());
+
+        addButton.setOnClickListener(v -> {
+            int a = Integer.parseInt(inputA.getText().toString());
+            int b = Integer.parseInt(inputB.getText().toString());
+            int sum = addNumbers(a, b);
+            result.setText("Result: " + sum);
+        });
     }
-
-    /**
-     * A native method that is implemented by the 'nativendkdemo' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
 }

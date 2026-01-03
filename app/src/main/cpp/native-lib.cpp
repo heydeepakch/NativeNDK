@@ -1,9 +1,13 @@
 #include <jni.h>
 
-extern "C" JNIEXPORT jstring JNICALL
-Java_com_example_nativendkdemo_MainActivity_stringFromJNI(
-        JNIEnv* env,
-        jobject /* this */) {
-    std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_example_nativendkdemo_MainActivity_getGreetingFromNative(JNIEnv* env, jobject) {
+    return env->NewStringUTF("Hello from C++ via JNI");
+}
+
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_example_nativendkdemo_MainActivity_addNumbers(JNIEnv* env, jobject, jint a, jint b) {
+    return a + b;
 }
